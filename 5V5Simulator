@@ -1,0 +1,159 @@
+
+using System;
+using System.Reflection.Emit;
+
+//一级的英雄和敌人的基础属性
+float basicHealth = 500;
+float basicAttack = 100;
+float basicDefense = 10;
+//————————————————————————————————————————
+Hero hero1 = new Hero(20, "肉盾");
+Hero hero2 = new Hero(20, "肉盾");
+Hero hero3 = new Hero(20, "肉盾");
+Hero hero4 = new Hero(20, "肉盾");
+Hero hero5 = new Hero(20, "肉盾");
+//————————————————————————————————————————
+Hero enemy1 = new Hero(20, "输出");
+Hero enemy2 = new Hero(20, "输出");
+Hero enemy3 = new Hero(20, "输出");
+Hero enemy4 = new Hero(20, "输出");
+Hero enemy5 = new Hero(20, "输出");
+//————————————————————————————————————————
+
+List<Hero> heroList = new List<Hero>(new Hero[] { hero1, hero2, hero3, hero4, hero5 });
+List<Hero> enemyList = new List<Hero>(new Hero[] { enemy1, enemy2, enemy3, enemy4, enemy5 });
+
+CalculateWinner();
+//————————————————————————————————————————
+void CalculateWinner()
+{
+    for(int n = 0; n < 100; n++)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Console.WriteLine("第"+(n+1)+"回合，" + "——————————————————————————————————————————");
+            Random random = new Random();
+            int j = random.Next(0, enemyList.Count);
+
+            if (i <= heroList.Count - 1)
+            {
+                Console.WriteLine(i+","+ heroList.Count);
+                Console.WriteLine(j + "," + enemyList.Count);
+                enemyList[j].health -= heroList[i].attack - enemyList[j].defense;
+                Console.WriteLine("第" + (j + 1) + "个敌人受到我方第" + (i + 1) + "个英雄的攻击" + "，受到" + (heroList[i].attack - enemyList[j].defense) + "点伤害,生命值剩余" + enemyList[j].health);
+            }
+            else
+            {
+                continue;
+            }
+            if (enemyList[j].health <= 0)
+            {
+                enemyList.RemoveAt(j);
+                Console.WriteLine("该敌人阵亡");
+            }
+            else
+            {
+                Console.WriteLine("该敌人存活");
+            }
+            //————————————————————————————————————————
+            if (enemyList.Count == 0)
+            {
+                Console.WriteLine("敌人已经全部阵亡");
+                break;
+            }
+            if (heroList.Count == 0)
+            {
+
+                Console.WriteLine("英雄已经全部阵亡");
+                break;
+            }
+            //————————————————————————————我方——————————————————————
+            int k = random.Next(0, heroList.Count);
+            if (i <= enemyList.Count - 1)
+            {
+                heroList[k].health -= enemyList[i].attack - heroList[k].defense;
+                Console.WriteLine("第" + (k + 1) + "个英雄受到对方第" + (i + 1) + "个敌人的攻击" + "，受到" + (enemyList[i].attack - heroList[k].defense) + "点伤害,生命值剩余" + heroList[k].health);
+            }
+            else
+            {
+                continue;
+            }
+            
+            if (heroList[k].health < 0)
+            {
+                heroList.RemoveAt(k);
+                Console.WriteLine("该英雄阵亡");
+            }
+            else
+            {
+                Console.WriteLine("该英雄存活");
+            }
+            //————————————————————————————————————————
+            if (enemyList.Count == 0)
+            {
+                Console.WriteLine("敌人已经全部阵亡");
+                break;
+            }
+            if (heroList.Count == 0)
+            {
+
+                Console.WriteLine("英雄已经全部阵亡");
+                break;
+            }
+        }
+        if (enemyList.Count == 0)
+        {
+            Console.WriteLine("敌人已经全部阵亡");
+            break;
+        }
+        if (heroList.Count == 0)
+        {
+            Console.WriteLine("英雄已经全部阵亡");
+            break;
+        }
+    }
+}
+
+
+public class Hero
+{
+
+    public float health;
+    public float defense;
+    public float attack;
+
+    string occupation;
+
+    public Hero(int level,string occupation)
+    {
+        if (occupation == "肉盾")
+        {
+            health = 500 + (level - 1) * 195;
+            attack = 100 + (level - 1) * 17;
+            defense = 10 + (level - 1) * 4;
+        }
+        if (occupation == "输出")
+        {
+            health = 500 + (level - 1) * 120;
+            attack = 100 + (level - 1) * 27;
+            defense = 10 + (level - 1) * 2;
+        }
+        if (occupation == "辅助")
+        {
+            health = 500 + (level - 1) * 150;
+            attack = 100 + (level - 1) * 21;
+            defense = 10 + (level - 1) * 3;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
